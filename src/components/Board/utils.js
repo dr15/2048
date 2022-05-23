@@ -1,4 +1,4 @@
-import {useCallback} from "react";
+import {cloneDeep} from "lodash";
 
 export const initialBoard = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
 export const baseValue = 2;
@@ -22,4 +22,31 @@ export function getRandomSquare(board) {
   } else {
     return getRandomSquare(board);
   }
+}
+
+function trimColumnUp(board, rowIndex, squareIndex) {
+  const value = board[rowIndex][squareIndex];
+  const squareHasValue = value > 0;
+  const hasSquareAbove = rowIndex - 1 >= 0;
+  const squareAbove = hasSquareAbove ? board[rowIndex - 1][squareIndex] : 0;
+  const hasEmptySquareAbove = hasSquareAbove && squareAbove === 0;
+
+  if (squareHasValue && hasEmptySquareAbove) {
+    board[rowIndex - 1][squareIndex] = value;
+    board[rowIndex][squareIndex] = 0;
+    trimColumnUp(board, rowIndex - 1, squareIndex);
+  }
+
+  if (rowIndex + 1 < board.length) trimColumnUp(board, rowIndex + 1, squareIndex);
+}
+
+export function trimBoardUp(board) {
+  const newBoard = cloneDeep(board);
+
+  const columns = Array.from({length: newBoard.length}, (v, i) => 0);
+  columns.forEach((column, columnIndex) => {
+    trimColumnUp(newBoard, 0, columnIndex);
+  })
+
+  return newBoard;
 }

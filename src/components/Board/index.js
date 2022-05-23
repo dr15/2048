@@ -1,13 +1,13 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {cloneDeep} from "lodash";
-import {baseValue, getRandomSquare, initialBoard, isBoardFull} from "./utils";
+import {baseValue, getRandomSquare, initialBoard, isBoardFull, trimBoardUp} from "./utils";
 
 function Board() {
-    const [boardValues, setBoardValues] = useState(initialBoard);
+    const [board, setBoard] = useState(initialBoard);
     const [isFull, setIsFull] = useState(false);
 
-    const updateBoard = useCallback((board = boardValues) => {
-        if (isBoardFull(board)) {
+    const updateBoard = useCallback((boardValues = board) => {
+        if (isBoardFull(boardValues)) {
             setIsFull(true);
             return;
         }
@@ -19,17 +19,32 @@ function Board() {
         newBoard[newSquare[0]][newSquare[1]] = baseValue;
 
         // update board state
-        setBoardValues(newBoard);
+        setBoard(newBoard);
     }, []);
+
+    const onClickUp = useCallback(() => {
+        const trimmedBoard = trimBoardUp(board);
+
+        updateBoard(trimmedBoard);
+    }, [board]);
+
+    const onClickDown = useCallback(() => {
+    }, [board]);
+
+    const onClickLeft = useCallback(() => {
+    }, [board]);
+
+    const onClickRight = useCallback(() => {
+    }, [board]);
 
     useEffect(() => {
         updateBoard();
     }, []);
 
     return (
-        <div className="board">
+        <div className="board" onClick={onClickUp}>
             <div className="game-over">{isFull ? 'GAME OVER' : null}</div>
-            {boardValues.map((row, rowIndex) =>
+            {board.map((row, rowIndex) =>
               <div className="row" key={rowIndex}>
                   {row.map((square, squareIndex) =>
                     <div className={`square-${square}`} key={squareIndex}>{square ? square : ''}</div>
