@@ -1,46 +1,26 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {cloneDeep} from "lodash";
 import {
-    baseValue,
+    combineBoardDown,
     combineBoardUp,
-    getRandomSquare,
-    initialBoard,
-    isBoardFull,
     trimBoardDown,
     trimBoardUp
 } from "./utils";
 
-function Board() {
-    const [board, setBoard] = useState(initialBoard);
-    const [isFull, setIsFull] = useState(false);
-
-    const updateBoard = useCallback((boardValues = board) => {
-        if (isBoardFull(boardValues)) {
-            setIsFull(true);
-            return;
-        }
-
-        const newBoard = cloneDeep(boardValues);
-
-        // add new random square
-        const newSquare = getRandomSquare(newBoard);
-        newBoard[newSquare[0]][newSquare[1]] = baseValue;
-
-        // update board state
-        setBoard(newBoard);
-    }, []);
-
+function Board({updateBoard, board, isFull}) {
     const onClickUp = useCallback(() => {
         const trimmedBoard = trimBoardUp(board);
         const combinedBoard = combineBoardUp(trimmedBoard);
+        const retrimmedBoard = trimBoardUp(combinedBoard);
 
-        updateBoard(combinedBoard);
+        updateBoard(retrimmedBoard);
     }, [board]);
 
     const onClickDown = useCallback(() => {
         const trimmedBoard = trimBoardDown(board);
+        const combinedBoard = combineBoardDown(trimmedBoard);
+        const retrimmedBoard = trimBoardDown(combinedBoard);
 
-        updateBoard(trimmedBoard);
+        updateBoard(retrimmedBoard);
     }, [board]);
 
     const onClickLeft = useCallback(() => {
@@ -54,7 +34,7 @@ function Board() {
     }, []);
 
     return (
-        <div className="board" onClick={onClickUp}>
+        <div className="board" onClick={onClickDown}>
             <div className="game-over">{isFull ? 'GAME OVER' : null}</div>
             {board.map((row, rowIndex) =>
               <div className="row" key={rowIndex}>

@@ -24,6 +24,10 @@ export function getRandomSquare(board) {
   }
 }
 
+export function tallyScore(board) {
+  return board.reduce((previousValue, currentValue, currentIndex) => previousValue + board[currentIndex].reduce((prevValue, currentValue) => prevValue + currentValue, 0), 0);
+}
+
 /* UP */
 function trimColumnUp(board, rowIndex, squareIndex) {
   const value = board[rowIndex][squareIndex];
@@ -103,6 +107,34 @@ export function trimBoardDown(board) {
 
   columns.forEach((column, columnIndex) => {
     trimColumnDown(newBoard, board.length - 1, columnIndex);
+  })
+
+  return newBoard;
+}
+
+function combineColumnDown(board, rowIndex, squareIndex) {
+  const value = board[rowIndex][squareIndex];
+  const squareHasValue = value > 0;
+  const squareBelowHasValue = board[rowIndex - 1][squareIndex] > 0;
+  const hasSquareBelow = rowIndex - 1 >= 0;
+  const squareBelow = hasSquareBelow ? board[rowIndex - 1][squareIndex] : 0;
+
+  if (squareHasValue && squareBelowHasValue && value === squareBelow) {
+    board[rowIndex][squareIndex] = value * 2;
+    board[rowIndex - 1][squareIndex] = 0;
+  }
+
+  if (rowIndex - 1 >= 0) {
+    combineColumnUp(board, rowIndex - 1, squareIndex);
+  }
+}
+
+export function combineBoardDown(board) {
+  const newBoard = cloneDeep(board);
+
+  const columns = Array.from({length: newBoard.length}, (v, i) => 0);
+  columns.forEach((column, columnIndex) => {
+    combineColumnDown(newBoard, board.length - 1, columnIndex);
   })
 
   return newBoard;
