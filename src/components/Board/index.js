@@ -34,8 +34,8 @@ function Board({updateBoard, board, isFull}) {
     }, []);
 
     return (
-        <div className="board" onClick={onClickDown}>
-            <div className="game-over">{isFull ? 'GAME OVER' : null}</div>
+        <div className="board" onClick={onClickUp}>
+            {isFull ? <div className="game-over">GAME OVER</div> : null}
             {board.map((row, rowIndex) =>
               <div className="row" key={rowIndex}>
                   {row.map((square, squareIndex) =>
