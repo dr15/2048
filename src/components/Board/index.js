@@ -74,9 +74,13 @@ function Board() {
 
     return (
         <div className="board" onClick={shiftUp}>
-            {boardValues.map((row, i) => <div className="row" key={i}>
-                {row.map((square, j) => <div className="square" key={j}>{getSquareDisplayValue(square)}</div>)}
-            </div>)}
+            {boardValues.map((row, rowIndex) =>
+              <div className="row" key={rowIndex}>
+                  {row.map((square, squareIndex) =>
+                    <div className={`square-${square}`} key={squareIndex}>{square ? square : ''}</div>
+                  )}
+              </div>
+            )}
         </div>
     );
 }

@@ -1,43 +1,122 @@
-.App {
-  text-align: center;
-}
-
-body {
-  background: #faf8ef;
+html, body, #root {
+  height: 100vh;
 }
 
 h1 {
-  font-size: 80px;
-  font-weight: bold;
   margin: 0;
-  display: block;
-  float: left;
+  line-height: 60px;
+}
+
+.App {
+  font-size: 50px;
   color: #776e65;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  width: 450px;
+  margin: 0 auto;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-content: flex-start;
+  margin-top: 26px;
+  margin-bottom: 40px;
+  width: 100%;
+  height: 70px;
+}
+
+.dashboard {
+  display: flex;
+  font-size: 22px;
+  gap: 20px;
 }
 
 .board {
-  width: 430px;
+  background-color: #bbada0;
+  width: 450px;
+  height: 450px;
   display: flex;
-  gap: 10px;
   flex-direction: column;
-  background-color: saddlebrown;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
   border-radius: 5px;
-  padding: 10px;
 }
-
 
 .row {
   display: flex;
   gap: 10px;
 }
 
-.square {
+[class^="square"] {
   width: 100px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  height: 100px;
-  background-color: burlywood;
+  background-color: #3e3933;
+  color: white;
+}
 
+.square-0 {
+  background-color: #cdc1b4;
+}
+
+.square-2 {
+  background-color: #eee4da;
+}
+
+.square-4 {
+  background-color: #ede0c8;
+}
+
+.square-8 {
+  background-color: #f2b179;
+  color: white;
+}
+
+.square-16 {
+  background-color: #f59563;
+  color: white;
+}
+
+.square-32 {
+  background-color: #f67c5f;
+  color: white;
+}
+
+.square-64 {
+  background-color: #f65e3b;
+  color: white;
+}
+
+.square-128 {
+  background-color: #edcf72;
+  color: white;
+}
+
+.square-256 {
+  background-color: #edcc61;
+  color: white;
+}
+
+.square-512 {
+  background-color: #edc850;
+  color: white;
+}
+
+.square-1024 {
+  background-color: #edc53f;
+  color: white;
+}
+
+.square-2048 {
+  background-color: #edc22e;
+  color: white;
 }
