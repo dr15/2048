@@ -50,3 +50,30 @@ export function trimBoardUp(board) {
 
   return newBoard;
 }
+
+function trimColumnDown(board, rowIndex, squareIndex) {
+  const value = board[rowIndex][squareIndex];
+  const squareHasValue = value > 0;
+  const hasSquareBelow = rowIndex + 1 < board.length;
+  const squareBelow = hasSquareBelow ? board[rowIndex + 1][squareIndex] : 0;
+  const hasEmptySquareBelow = hasSquareBelow && squareBelow === 0;
+
+  if (squareHasValue && hasEmptySquareBelow) {
+    board[rowIndex + 1][squareIndex] = value;
+    board[rowIndex][squareIndex] = 0;
+    trimColumnDown(board, rowIndex + 1, squareIndex);
+  }
+
+  if (rowIndex - 1 >= 0) trimColumnDown(board, rowIndex - 1, squareIndex);
+}
+
+export function trimBoardDown(board) {
+  const newBoard = cloneDeep(board);
+  const columns = Array.from({length: newBoard.length}, (v, i) => 0);
+
+  columns.forEach((column, columnIndex) => {
+    trimColumnDown(newBoard, board.length - 1, columnIndex);
+  })
+
+  return newBoard;
+}
