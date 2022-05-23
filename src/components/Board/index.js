@@ -1,25 +1,13 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {cloneDeep} from "lodash";
-
-const initialBoard = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
-const baseValue = 2;
-
-function getRandomNumber(maxLimit = 4) {
-    let rand = Math.random() * maxLimit;
-    rand = Math.floor(rand); // 99
-    return rand;
-}
-
-function boardHasEmpty(board) {
-    return board.find(row => row.find(square => square === 0));
-}
+import {baseValue, getRandomNumber, initialBoard, isBoardFull} from "./utils";
 
 function Board() {
     const [boardValues, setBoardValues] = useState(initialBoard);
     const [isFull, setIsFull] = useState(false);
 
     const updateBoard = useCallback((board = boardValues) => {
-        // if (!boardHasEmpty(board)) {setIsFull(true); return board};
+        if (isBoardFull(board)) {setIsFull(true); return board};
         const x = getRandomNumber();
         const y = getRandomNumber();
 
@@ -30,10 +18,6 @@ function Board() {
         } else (updateBoard(board));
 
     }, []);
-
-    function getSquareDisplayValue(value) {
-        return value > 0 ? value : '';
-    }
 
     const shiftUp = useCallback(() => {
         const newBoard = cloneDeep(boardValues);
@@ -74,6 +58,7 @@ function Board() {
 
     return (
         <div className="board" onClick={shiftUp}>
+            <div className="game-over">{isFull ? 'GAME OVER' : null}</div>
             {boardValues.map((row, rowIndex) =>
               <div className="row" key={rowIndex}>
                   {row.map((square, squareIndex) =>
