@@ -24,6 +24,7 @@ export function getRandomSquare(board) {
   }
 }
 
+/* UP */
 function trimColumnUp(board, rowIndex, squareIndex) {
   const value = board[rowIndex][squareIndex];
   const squareHasValue = value > 0;
@@ -51,6 +52,35 @@ export function trimBoardUp(board) {
   return newBoard;
 }
 
+function combineColumnUp(board, rowIndex, squareIndex) {
+  const value = board[rowIndex][squareIndex];
+  const squareHasValue = value > 0;
+  const hasSquareAbove = rowIndex - 1 >= 0;
+  const squareAbove = hasSquareAbove ? board[rowIndex - 1][squareIndex] : 0;
+  const squareAboveHasValue = hasSquareAbove && board[rowIndex - 1][squareIndex] > 0;
+
+  if (squareHasValue && squareAboveHasValue && value === squareAbove) {
+    board[rowIndex - 1][squareIndex] = value * 2;
+    board[rowIndex][squareIndex] = 0;
+  }
+
+  if (rowIndex + 1 < board.length) {
+    combineColumnUp(board, rowIndex + 1, squareIndex);
+  }
+}
+
+export function combineBoardUp(board) {
+  const newBoard = cloneDeep(board);
+
+  const columns = Array.from({length: newBoard.length}, (v, i) => 0);
+  columns.forEach((column, columnIndex) => {
+    combineColumnUp(newBoard, 0, columnIndex);
+  })
+
+  return newBoard;
+}
+
+/* DOWN */
 function trimColumnDown(board, rowIndex, squareIndex) {
   const value = board[rowIndex][squareIndex];
   const squareHasValue = value > 0;

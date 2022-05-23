@@ -1,6 +1,14 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {cloneDeep} from "lodash";
-import {baseValue, getRandomSquare, initialBoard, isBoardFull, trimBoardDown, trimBoardUp} from "./utils";
+import {
+    baseValue,
+    combineBoardUp,
+    getRandomSquare,
+    initialBoard,
+    isBoardFull,
+    trimBoardDown,
+    trimBoardUp
+} from "./utils";
 
 function Board() {
     const [board, setBoard] = useState(initialBoard);
@@ -24,8 +32,9 @@ function Board() {
 
     const onClickUp = useCallback(() => {
         const trimmedBoard = trimBoardUp(board);
+        const combinedBoard = combineBoardUp(trimmedBoard);
 
-        updateBoard(trimmedBoard);
+        updateBoard(combinedBoard);
     }, [board]);
 
     const onClickDown = useCallback(() => {
