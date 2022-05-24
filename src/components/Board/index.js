@@ -3,9 +3,11 @@ import {
     arrowKeys,
     combineBoardDown,
     combineBoardLeft,
+    combineBoardRight,
     combineBoardUp,
     trimBoardDown,
     trimBoardLeft,
+    trimBoardRight,
     trimBoardUp
 } from "./utils";
 import useKeyPress from "../../hooks/useKeyPress";
@@ -41,6 +43,11 @@ function Board({updateBoard, board, isFull}) {
     }, [board]);
 
     const onClickRight = useCallback(() => {
+        const trimmedBoard = trimBoardRight(board);
+        const combinedBoard = combineBoardRight(trimmedBoard);
+        const retrimmedBoard = trimBoardRight(combinedBoard);
+
+        updateBoard(retrimmedBoard);
     }, [board]);
 
     useEffect(() => {

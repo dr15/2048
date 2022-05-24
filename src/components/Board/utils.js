@@ -146,7 +146,6 @@ export function combineBoardDown(board) {
   return newBoard;
 }
 
-
 /* LEFT */
 function trimRowLeft(board, rowIndex, squareIndex) {
   const value = board[rowIndex][squareIndex];
@@ -198,6 +197,62 @@ export function combineBoardLeft(board) {
   const rows = Array.from({length: newBoard.length}, (v, i) => 0);
   rows.forEach((row, rowIndex) => {
     combineRowLeft(newBoard, rowIndex, 0);
+  })
+
+  return newBoard;
+}
+
+/* RIGHT */
+function trimRowRight(board, rowIndex, squareIndex) {
+  const value = board[rowIndex][squareIndex];
+  const squareHasValue = value > 0;
+  const hasSquareToTheRight = squareIndex + 1 < board.length;
+  const squareToTheRight = hasSquareToTheRight ? board[rowIndex][squareIndex + 1] : 0;
+  const hasEmptySquareToTheRight = hasSquareToTheRight && squareToTheRight === 0;
+
+  if (squareHasValue && hasEmptySquareToTheRight) {
+    board[rowIndex][squareIndex + 1] = value;
+    board[rowIndex][squareIndex] = 0;
+    trimRowRight(board, rowIndex, squareIndex + 1);
+  }
+
+  if (squareIndex - 1 >= 0) trimRowRight(board, rowIndex, squareIndex - 1);
+}
+
+export function trimBoardRight(board) {
+  const newBoard = cloneDeep(board);
+  const rows = Array.from({length: newBoard.length}, (v, i) => 0);
+
+  rows.forEach((row, rowIndex) => {
+    trimRowRight(newBoard, rowIndex, board.length - 1);
+  })
+
+  return newBoard;
+}
+
+function combineRowRight(board, rowIndex, squareIndex) {
+  const value = board[rowIndex][squareIndex];
+  const squareHasValue = value > 0;
+  const hasSquareToTheLeft = squareIndex - 1 >= 0;
+  const squareToTheLeft = hasSquareToTheLeft ? board[rowIndex][squareIndex - 1] : 0;
+  const squareToTheLeftHasValue = hasSquareToTheLeft && squareToTheLeft > 0;
+
+  if (squareHasValue && squareToTheLeftHasValue && value === squareToTheLeft) {
+    board[rowIndex][squareIndex - 1] = value * 2;
+    board[rowIndex][squareIndex ] = 0;
+  }
+
+  if (squareIndex + 1 < board.length) {
+    combineRowRight(board, rowIndex, squareIndex + 1);
+  }
+}
+
+export function combineBoardRight(board) {
+  const newBoard = cloneDeep(board);
+
+  const rows = Array.from({length: newBoard.length}, (v, i) => 0);
+  rows.forEach((row, rowIndex) => {
+    combineRowRight(newBoard, rowIndex, 0);
   })
 
   return newBoard;
