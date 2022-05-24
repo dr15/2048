@@ -2,6 +2,12 @@ import {cloneDeep} from "lodash";
 
 export const initialBoard = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
 export const baseValue = 2;
+export const arrowKeys = {
+  'left': 'ArrowLeft',
+  'up': 'ArrowUp',
+  'right': 'ArrowRight',
+  'down': 'ArrowDown',
+}
 
 export function getRandomNumber(min = 0, max = 3) {
   min = Math.ceil(min);
