@@ -2,8 +2,10 @@ import React, {useCallback, useEffect, useState} from "react";
 import {
     arrowKeys,
     combineBoardDown,
+    combineBoardLeft,
     combineBoardUp,
     trimBoardDown,
+    trimBoardLeft,
     trimBoardUp
 } from "./utils";
 import useKeyPress from "../../hooks/useKeyPress";
@@ -31,27 +33,30 @@ function Board({updateBoard, board, isFull}) {
     }, [board]);
 
     const onClickLeft = useCallback(() => {
+        const trimmedBoard = trimBoardLeft(board);
+        const combinedBoard = combineBoardLeft(trimmedBoard);
+        const retrimmedBoard = trimBoardLeft(combinedBoard);
+
+        updateBoard(retrimmedBoard);
     }, [board]);
 
     const onClickRight = useCallback(() => {
     }, [board]);
 
     useEffect(() => {
-        console.log('clicked up');
-        onClickUp();
+        if (clickUp) onClickUp();
     }, [clickUp]);
 
     useEffect(() => {
-        console.log('clicked down');
-        onClickDown();
+        if (clickDown) onClickDown();
     }, [clickDown]);
 
     useEffect(() => {
-        console.log('clicked left');
+        if (clickLeft) onClickLeft();
     }, [clickLeft]);
 
     useEffect(() => {
-        console.log('clicked right');
+        if (clickRight) onClickRight();
     }, [clickRight]);
 
     useEffect(() => {

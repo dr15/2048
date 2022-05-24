@@ -145,3 +145,60 @@ export function combineBoardDown(board) {
 
   return newBoard;
 }
+
+
+/* LEFT */
+function trimRowLeft(board, rowIndex, squareIndex) {
+  const value = board[rowIndex][squareIndex];
+  const squareHasValue = value > 0;
+  const hasSquareToTheLeft = squareIndex - 1 >= 0;
+  const squareToTheLeft = hasSquareToTheLeft ? board[rowIndex][squareIndex - 1] : 0;
+  const hasEmptySquareToTheLeft = hasSquareToTheLeft && squareToTheLeft === 0;
+
+  if (squareHasValue && hasEmptySquareToTheLeft) {
+    board[rowIndex][squareIndex - 1] = value;
+    board[rowIndex][squareIndex] = 0;
+    trimRowLeft(board, rowIndex, squareIndex - 1);
+  }
+
+  if (squareIndex + 1 < board.length) trimRowLeft(board, rowIndex, squareIndex + 1);
+}
+
+export function trimBoardLeft(board) {
+  const newBoard = cloneDeep(board);
+  const rows = Array.from({length: newBoard.length}, (v, i) => 0);
+
+  rows.forEach((row, rowIndex) => {
+    trimRowLeft(newBoard, rowIndex, 0);
+  })
+
+  return newBoard;
+}
+
+function combineRowLeft(board, rowIndex, squareIndex) {
+  const value = board[rowIndex][squareIndex];
+  const squareHasValue = value > 0;
+  const hasSquareToTheLeft = squareIndex - 1 >= 0;
+  const squareToTheLeft = hasSquareToTheLeft ? board[rowIndex][squareIndex - 1] : 0;
+  const squareToTheLeftHasValue = hasSquareToTheLeft && squareToTheLeft > 0;
+
+  if (squareHasValue && squareToTheLeftHasValue && value === squareToTheLeft) {
+    board[rowIndex][squareIndex - 1] = value * 2;
+    board[rowIndex][squareIndex ] = 0;
+  }
+
+  if (squareIndex + 1 < board.length) {
+    combineRowLeft(board, rowIndex, squareIndex + 1);
+  }
+}
+
+export function combineBoardLeft(board) {
+  const newBoard = cloneDeep(board);
+
+  const rows = Array.from({length: newBoard.length}, (v, i) => 0);
+  rows.forEach((row, rowIndex) => {
+    combineRowLeft(newBoard, rowIndex, 0);
+  })
+
+  return newBoard;
+}
