@@ -121,17 +121,17 @@ export function trimBoardDown(board) {
 function combineColumnDown(board, rowIndex, squareIndex) {
   const value = board[rowIndex][squareIndex];
   const squareHasValue = value > 0;
-  const squareBelowHasValue = board[rowIndex - 1][squareIndex] > 0;
-  const hasSquareBelow = rowIndex - 1 >= 0;
-  const squareBelow = hasSquareBelow ? board[rowIndex - 1][squareIndex] : 0;
+  const hasSquareBelow = rowIndex + 1 < board.length;
+  const squareBelow = hasSquareBelow ? board[rowIndex + 1][squareIndex] : 0;
+  const squareBelowHasValue = hasSquareBelow && board[rowIndex + 1][squareIndex] > 0;
 
   if (squareHasValue && squareBelowHasValue && value === squareBelow) {
-    board[rowIndex][squareIndex] = value * 2;
-    board[rowIndex - 1][squareIndex] = 0;
+    board[rowIndex + 1][squareIndex] = value * 2;
+    board[rowIndex][squareIndex] = 0;
   }
 
   if (rowIndex - 1 >= 0) {
-    combineColumnUp(board, rowIndex - 1, squareIndex);
+    combineColumnDown(board, rowIndex - 1, squareIndex);
   }
 }
 
