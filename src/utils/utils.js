@@ -47,6 +47,14 @@ export function tallyScore(board) {
   );
 }
 
+export function areBoardsEqual(board1, board2) {
+  return board1.every((row, rowIndex) => {
+    return row.every(
+      (square, squareIndex) => square === board2[rowIndex][squareIndex],
+    );
+  });
+}
+
 function getOperationVars(board, rowIndex, squareIndex) {
   const value = board[rowIndex][squareIndex];
   const squareHasValue = value > 0;

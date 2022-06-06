@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { cloneDeep } from 'lodash';
 import Board from './components/Board';
 import {
+  areBoardsEqual,
   baseValue,
   getRandomSquare,
   initialBoard,
@@ -13,9 +14,14 @@ import './App.css';
 function App() {
   const [board, setBoard] = useState(initialBoard);
   const [isFull, setIsFull] = useState(false);
+  const [isFirstRun, setIsFirstRun] = useState(true);
 
   const updateBoard = useCallback(
     (boardValues = board) => {
+      if (!isFirstRun && areBoardsEqual(boardValues, board)) {
+        return;
+      }
+
       if (isBoardFull(boardValues)) {
         setIsFull(true);
         return;
@@ -29,6 +35,7 @@ function App() {
 
       // update board state
       setBoard(newBoard);
+      setIsFirstRun(false);
     },
     [board],
   );
