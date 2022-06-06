@@ -9,7 +9,7 @@ import {
     trimBoardLeft,
     trimBoardRight,
     trimBoardUp
-} from "./utils";
+} from "../../utils/utils";
 import useKeyPress from "../../hooks/useKeyPress";
 
 function Board({updateBoard, board, isFull}) {

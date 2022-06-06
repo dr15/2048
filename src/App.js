@@ -1,7 +1,7 @@
 import {useCallback, useState} from "react";
 import {cloneDeep} from "lodash";
 import Board from "./components/Board";
-import {baseValue, getRandomSquare, initialBoard, isBoardFull, tallyScore} from "./components/Board/utils";
+import {baseValue, getRandomSquare, initialBoard, isBoardFull, tallyScore} from "./utils/utils";
 import './App.css';
 
 function App() {
