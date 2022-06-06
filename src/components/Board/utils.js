@@ -34,13 +34,60 @@ export function tallyScore(board) {
   return board.reduce((previousValue, currentValue, currentIndex) => previousValue + board[currentIndex].reduce((prevValue, currentValue) => prevValue + currentValue, 0), 0);
 }
 
-/* UP */
-function trimColumnUp(board, rowIndex, squareIndex) {
+function getOperationVars(board, rowIndex, squareIndex) {
   const value = board[rowIndex][squareIndex];
   const squareHasValue = value > 0;
+
+  /* above */
   const hasSquareAbove = rowIndex - 1 >= 0;
   const squareAbove = hasSquareAbove ? board[rowIndex - 1][squareIndex] : 0;
   const hasEmptySquareAbove = hasSquareAbove && squareAbove === 0;
+  const squareAboveHasValue = hasSquareAbove && board[rowIndex - 1][squareIndex] > 0;
+
+  /* below */
+  const hasSquareBelow = rowIndex + 1 < board.length;
+  const squareBelow = hasSquareBelow ? board[rowIndex + 1][squareIndex] : 0;
+  const hasEmptySquareBelow = hasSquareBelow && squareBelow === 0;
+  const squareBelowHasValue = hasSquareBelow && board[rowIndex + 1][squareIndex] > 0;
+
+  /* left */
+  const hasSquareToTheLeft = squareIndex - 1 >= 0;
+  const squareToTheLeft = hasSquareToTheLeft ? board[rowIndex][squareIndex - 1] : 0;
+  const hasEmptySquareToTheLeft = hasSquareToTheLeft && squareToTheLeft === 0;
+  const squareToTheLeftHasValue = hasSquareToTheLeft && squareToTheLeft > 0;
+
+  /* right */
+  const hasSquareToTheRight = squareIndex + 1 < board.length;
+  const squareToTheRight = hasSquareToTheRight ? board[rowIndex][squareIndex + 1] : 0;
+  const hasEmptySquareToTheRight = hasSquareToTheRight && squareToTheRight === 0;
+  const squareToTheRightHasValue = hasSquareToTheRight && squareToTheRight > 0;
+
+
+  return {
+    value,
+    squareHasValue,
+    hasSquareAbove,
+    squareAbove,
+    hasEmptySquareAbove,
+    squareAboveHasValue,
+    hasSquareBelow,
+    squareBelow,
+    hasEmptySquareBelow,
+    squareBelowHasValue,
+    hasSquareToTheLeft,
+    squareToTheLeft,
+    hasEmptySquareToTheLeft,
+    squareToTheLeftHasValue,
+    hasSquareToTheRight,
+    squareToTheRight,
+    hasEmptySquareToTheRight,
+    squareToTheRightHasValue
+  };
+}
+
+/* UP */
+function trimColumnUp(board, rowIndex, squareIndex) {
+  const {value, squareHasValue, hasEmptySquareAbove} = getOperationVars(board, rowIndex, squareIndex);
 
   if (squareHasValue && hasEmptySquareAbove) {
     board[rowIndex - 1][squareIndex] = value;
@@ -63,11 +110,7 @@ export function trimBoardUp(board) {
 }
 
 function combineColumnUp(board, rowIndex, squareIndex) {
-  const value = board[rowIndex][squareIndex];
-  const squareHasValue = value > 0;
-  const hasSquareAbove = rowIndex - 1 >= 0;
-  const squareAbove = hasSquareAbove ? board[rowIndex - 1][squareIndex] : 0;
-  const squareAboveHasValue = hasSquareAbove && board[rowIndex - 1][squareIndex] > 0;
+  const {value, squareHasValue, squareAbove, squareAboveHasValue} = getOperationVars(board, rowIndex, squareIndex);
 
   if (squareHasValue && squareAboveHasValue && value === squareAbove) {
     board[rowIndex - 1][squareIndex] = value * 2;
@@ -92,11 +135,8 @@ export function combineBoardUp(board) {
 
 /* DOWN */
 function trimColumnDown(board, rowIndex, squareIndex) {
-  const value = board[rowIndex][squareIndex];
-  const squareHasValue = value > 0;
-  const hasSquareBelow = rowIndex + 1 < board.length;
-  const squareBelow = hasSquareBelow ? board[rowIndex + 1][squareIndex] : 0;
-  const hasEmptySquareBelow = hasSquareBelow && squareBelow === 0;
+  const {value, squareHasValue, hasEmptySquareBelow} = getOperationVars(board, rowIndex, squareIndex);
+
 
   if (squareHasValue && hasEmptySquareBelow) {
     board[rowIndex + 1][squareIndex] = value;
@@ -119,11 +159,7 @@ export function trimBoardDown(board) {
 }
 
 function combineColumnDown(board, rowIndex, squareIndex) {
-  const value = board[rowIndex][squareIndex];
-  const squareHasValue = value > 0;
-  const hasSquareBelow = rowIndex + 1 < board.length;
-  const squareBelow = hasSquareBelow ? board[rowIndex + 1][squareIndex] : 0;
-  const squareBelowHasValue = hasSquareBelow && board[rowIndex + 1][squareIndex] > 0;
+  const {value, squareHasValue, squareBelowHasValue, squareBelow} = getOperationVars(board, rowIndex, squareIndex);
 
   if (squareHasValue && squareBelowHasValue && value === squareBelow) {
     board[rowIndex + 1][squareIndex] = value * 2;
@@ -148,11 +184,7 @@ export function combineBoardDown(board) {
 
 /* LEFT */
 function trimRowLeft(board, rowIndex, squareIndex) {
-  const value = board[rowIndex][squareIndex];
-  const squareHasValue = value > 0;
-  const hasSquareToTheLeft = squareIndex - 1 >= 0;
-  const squareToTheLeft = hasSquareToTheLeft ? board[rowIndex][squareIndex - 1] : 0;
-  const hasEmptySquareToTheLeft = hasSquareToTheLeft && squareToTheLeft === 0;
+  const {value, squareHasValue, hasEmptySquareToTheLeft} = getOperationVars(board, rowIndex, squareIndex);
 
   if (squareHasValue && hasEmptySquareToTheLeft) {
     board[rowIndex][squareIndex - 1] = value;
@@ -175,11 +207,7 @@ export function trimBoardLeft(board) {
 }
 
 function combineRowLeft(board, rowIndex, squareIndex) {
-  const value = board[rowIndex][squareIndex];
-  const squareHasValue = value > 0;
-  const hasSquareToTheLeft = squareIndex - 1 >= 0;
-  const squareToTheLeft = hasSquareToTheLeft ? board[rowIndex][squareIndex - 1] : 0;
-  const squareToTheLeftHasValue = hasSquareToTheLeft && squareToTheLeft > 0;
+  const {value, squareHasValue, squareToTheLeftHasValue, squareToTheLeft} = getOperationVars(board, rowIndex, squareIndex);
 
   if (squareHasValue && squareToTheLeftHasValue && value === squareToTheLeft) {
     board[rowIndex][squareIndex - 1] = value * 2;
@@ -204,11 +232,7 @@ export function combineBoardLeft(board) {
 
 /* RIGHT */
 function trimRowRight(board, rowIndex, squareIndex) {
-  const value = board[rowIndex][squareIndex];
-  const squareHasValue = value > 0;
-  const hasSquareToTheRight = squareIndex + 1 < board.length;
-  const squareToTheRight = hasSquareToTheRight ? board[rowIndex][squareIndex + 1] : 0;
-  const hasEmptySquareToTheRight = hasSquareToTheRight && squareToTheRight === 0;
+  const {value, squareHasValue, hasEmptySquareToTheRight} = getOperationVars(board, rowIndex, squareIndex);
 
   if (squareHasValue && hasEmptySquareToTheRight) {
     board[rowIndex][squareIndex + 1] = value;
@@ -231,11 +255,7 @@ export function trimBoardRight(board) {
 }
 
 function combineRowRight(board, rowIndex, squareIndex) {
-  const value = board[rowIndex][squareIndex];
-  const squareHasValue = value > 0;
-  const hasSquareToTheLeft = squareIndex - 1 >= 0;
-  const squareToTheLeft = hasSquareToTheLeft ? board[rowIndex][squareIndex - 1] : 0;
-  const squareToTheLeftHasValue = hasSquareToTheLeft && squareToTheLeft > 0;
+  const {value, squareHasValue, squareToTheLeftHasValue, squareToTheLeft} = getOperationVars(board, rowIndex, squareIndex);
 
   if (squareHasValue && squareToTheLeftHasValue && value === squareToTheLeft) {
     board[rowIndex][squareIndex - 1] = value * 2;
