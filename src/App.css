@@ -38,7 +38,6 @@ header {
 
 .board {
   position: relative;
-  background-color: #bbada0;
   width: 450px;
   height: 450px;
   display: flex;
@@ -47,6 +46,14 @@ header {
   align-items: center;
   justify-content: center;
   border-radius: 5px;
+}
+
+.square-placeholders-wrapper {
+  background-color: #bbada0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
 
 .game-over {
@@ -76,12 +83,20 @@ header {
   color: white;
 }
 
-.square-0 {
+.square-placeholder {
   background-color: #cdc1b4;
+}
+
+.square-0 {
+  background-color: transparent;
+  opacity: 0;
+  transform: scale(0);
 }
 
 .square-2 {
   background-color: #eee4da;
+  opacity: 1;
+  transform: scale(1);
 }
 
 .square-4 {

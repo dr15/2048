@@ -39,7 +39,9 @@
     "lodash": "^4.17.21",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "react-flip-toolkit": "^7.0.14",
     "react-scripts": "5.0.1",
+    "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {

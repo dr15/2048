@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
+import { Flipped, Flipper } from 'react-flip-toolkit';
 import {
   arrowKeys,
   combineBoardDown,
@@ -12,7 +13,7 @@ import {
 } from '../../utils/utils';
 import useKeyPress from '../../hooks/useKeyPress';
 
-function Board({ updateBoard, board, isFull }) {
+function Board({ updateBoard, board, isFull, animationUpdate }) {
   const clickUp = useKeyPress(arrowKeys.up);
   const clickDown = useKeyPress(arrowKeys.down);
   const clickLeft = useKeyPress(arrowKeys.left);
@@ -71,18 +72,33 @@ function Board({ updateBoard, board, isFull }) {
   }, []); // eslint-disable-line
 
   return (
-    <div className="board">
-      {isFull ? <div className="game-over">GAME OVER</div> : null}
-      {board.map((row, rowIndex) => (
-        <div className="row" key={rowIndex}>
-          {row.map((square, squareIndex) => (
-            <div className={`square-${square}`} key={squareIndex}>
-              {square ? square : ''}
+    <Flipper flipKey={animationUpdate} spring={{ stiffness: 584, damping: 43 }}>
+      <div className="board">
+        <div className="board square-placeholders-wrapper">
+          {board.map((row, rowIndex) => (
+            <div className="row" key={rowIndex}>
+              {row.map((square, squareIndex) => (
+                <div className="square-placeholder" key={squareIndex} />
+              ))}
             </div>
           ))}
         </div>
-      ))}
-    </div>
+        {isFull ? <div className="game-over">GAME OVER</div> : null}
+        {board.map((row, rowIndex) => (
+          <Flipped key={rowIndex} flipId={rowIndex}>
+            <div className="row">
+              {row.map((square) => (
+                <Flipped key={square.id} flipId={square.id}>
+                  <div className={`square-${square.value}`}>
+                    {square.value ? square.value : ''}
+                  </div>
+                </Flipped>
+              ))}
+            </div>
+          </Flipped>
+        ))}
+      </div>
+    </Flipper>
   );
 }
 

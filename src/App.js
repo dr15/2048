@@ -4,17 +4,18 @@ import Board from './components/Board';
 import {
   areBoardsEqual,
   baseValue,
+  createInitialBoard,
   getRandomSquare,
-  initialBoard,
   isBoardFull,
   tallyScore,
 } from './utils/utils';
 import './App.css';
 
 function App() {
-  const [board, setBoard] = useState(initialBoard);
+  const [board, setBoard] = useState(createInitialBoard());
   const [isFull, setIsFull] = useState(false);
   const [isFirstRun, setIsFirstRun] = useState(true);
+  const [animationUpdate, setAnimationUpdate] = useState(false);
 
   const updateBoard = useCallback(
     (boardValues = board) => {
@@ -31,17 +32,18 @@ function App() {
 
       // add new random square
       const newSquare = getRandomSquare(newBoard);
-      newBoard[newSquare[0]][newSquare[1]] = baseValue;
+      newBoard[newSquare[0]][newSquare[1]].value = baseValue;
 
       // update board state
       setBoard(newBoard);
       setIsFirstRun(false);
+      setAnimationUpdate(!animationUpdate);
     },
     [board],
   );
 
   const setNewGame = useCallback(() => {
-    updateBoard(initialBoard);
+    updateBoard(createInitialBoard());
     setIsFull(false);
   }, [updateBoard]);
 
@@ -57,7 +59,12 @@ function App() {
           <button onClick={setNewGame}>new game</button>
         </div>
       </header>
-      <Board board={board} updateBoard={updateBoard} isFull={isFull} />
+      <Board
+        board={board}
+        updateBoard={updateBoard}
+        isFull={isFull}
+        animationUpdate={animationUpdate}
+      />
     </div>
   );
 }
