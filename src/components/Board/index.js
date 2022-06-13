@@ -8,6 +8,7 @@ import {
   onMoveUp,
 } from '../../utils/utils';
 import useKeyPress from '../../hooks/useKeyPress';
+import PlaceholderBoard from './PlaceholderBoard';
 
 function Board({ updateBoard, board, isFull, animationUpdate }) {
   const clickUp = useKeyPress(arrowKeys.up);
@@ -54,15 +55,7 @@ function Board({ updateBoard, board, isFull, animationUpdate }) {
   return (
     <Flipper flipKey={animationUpdate} spring={{ stiffness: 584, damping: 43 }}>
       <div className="board">
-        <div className="board square-placeholders-wrapper">
-          {board.map((row, rowIndex) => (
-            <div className="row" key={rowIndex}>
-              {row.map((square, squareIndex) => (
-                <div className="square-placeholder" key={squareIndex} />
-              ))}
-            </div>
-          ))}
-        </div>
+        <PlaceholderBoard board={board} />
         {isFull ? <div className="game-over">GAME OVER</div> : null}
         {board.map((row, rowIndex) => (
           <Flipped key={rowIndex} flipId={rowIndex}>
