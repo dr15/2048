@@ -17,6 +17,19 @@ function App() {
   const [isFirstRun, setIsFirstRun] = useState(true);
   const [animationUpdate, setAnimationUpdate] = useState(false);
 
+  const addRandomSquare = useCallback((board) => {
+    const newBoard = cloneDeep(board);
+
+    // add new random square
+    const newSquare = getRandomSquare(newBoard);
+    newBoard[newSquare[0]][newSquare[1]].value = baseValue;
+
+    // update board state
+    setBoard(newBoard);
+    setIsFirstRun(false);
+    setAnimationUpdate(!animationUpdate);
+  }, []); // eslint-disable-line
+
   const updateBoard = useCallback(
     (boardValues = board) => {
       if (!isFirstRun && areBoardsEqual(boardValues, board)) {
@@ -30,16 +43,16 @@ function App() {
 
       const newBoard = cloneDeep(boardValues);
 
-      // add new random square
-      const newSquare = getRandomSquare(newBoard);
-      newBoard[newSquare[0]][newSquare[1]].value = baseValue;
-
       // update board state
       setBoard(newBoard);
-      setIsFirstRun(false);
       setAnimationUpdate(!animationUpdate);
+
+      // add a new square after a delay
+      setTimeout(() => {
+        addRandomSquare(newBoard);
+      }, 200);
     },
-    [board],
+    [board, addRandomSquare], // eslint-disable-line
   );
 
   const setNewGame = useCallback(() => {
