@@ -10,6 +10,7 @@ export const createInitialBoard = (size = 4) => {
 };
 
 export const baseValue = 2;
+
 export const arrowKeys = {
   left: 'ArrowLeft',
   up: 'ArrowUp',
@@ -61,8 +62,6 @@ export function areBoardsEqual(board1, board2) {
 function getOperationVars(board, rowIndex, squareIndex) {
   const value = board[rowIndex][squareIndex].value;
   const squareHasValue = value > 0;
-
-  /* above */
   const hasSquareAbove = rowIndex - 1 >= 0;
   const squareAbove = hasSquareAbove
     ? board[rowIndex - 1][squareIndex].value
@@ -71,56 +70,19 @@ function getOperationVars(board, rowIndex, squareIndex) {
   const squareAboveHasValue =
     hasSquareAbove && board[rowIndex - 1][squareIndex].value > 0;
 
-  /* below */
-  const hasSquareBelow = rowIndex + 1 < board.length;
-  const squareBelow = hasSquareBelow
-    ? board[rowIndex + 1][squareIndex].value
-    : 0;
-  const hasEmptySquareBelow = hasSquareBelow && squareBelow === 0;
-  const squareBelowHasValue =
-    hasSquareBelow && board[rowIndex + 1][squareIndex].value > 0;
-
-  /* left */
-  const hasSquareToTheLeft = squareIndex - 1 >= 0;
-  const squareToTheLeft = hasSquareToTheLeft
-    ? board[rowIndex][squareIndex - 1].value
-    : 0;
-  const hasEmptySquareToTheLeft = hasSquareToTheLeft && squareToTheLeft === 0;
-  const squareToTheLeftHasValue = hasSquareToTheLeft && squareToTheLeft > 0;
-
-  /* right */
-  const hasSquareToTheRight = squareIndex + 1 < board.length;
-  const squareToTheRight = hasSquareToTheRight
-    ? board[rowIndex][squareIndex + 1].value
-    : 0;
-  const hasEmptySquareToTheRight =
-    hasSquareToTheRight && squareToTheRight === 0;
-  const squareToTheRightHasValue = hasSquareToTheRight && squareToTheRight > 0;
-
   return {
     value,
     squareHasValue,
-    hasSquareAbove,
     squareAbove,
     hasEmptySquareAbove,
     squareAboveHasValue,
-    hasSquareBelow,
-    squareBelow,
-    hasEmptySquareBelow,
-    squareBelowHasValue,
-    hasSquareToTheLeft,
-    squareToTheLeft,
-    hasEmptySquareToTheLeft,
-    squareToTheLeftHasValue,
-    hasSquareToTheRight,
-    squareToTheRight,
-    hasEmptySquareToTheRight,
-    squareToTheRightHasValue,
   };
 }
 
 function rotateArrayClockwise(array, times = 1) {
   let newArray = cloneDeep(array);
+
+  if (times === 0) return newArray;
 
   for (let i = 0; i < times; i++) {
     newArray = newArray[0].map((value, index) =>
@@ -131,7 +93,6 @@ function rotateArrayClockwise(array, times = 1) {
   return newArray;
 }
 
-/* UP */
 function removeSpacesRecursively(board, rowIndex, squareIndex) {
   const { value, squareHasValue, hasEmptySquareAbove } = getOperationVars(
     board,
@@ -194,52 +155,28 @@ export function combineSquares(board) {
   return newBoard;
 }
 
-/* up */
-export function trimBoardUp(board) {
-  const newBoard = cloneDeep(board);
-  return removeSpaces(newBoard);
+export function onMove(board, rotationsBefore, rotationsAfter) {
+  const newBoard = rotateArrayClockwise(cloneDeep(board), rotationsBefore);
+  const updatedBoard = removeSpaces(combineSquares(removeSpaces(newBoard)));
+  return rotateArrayClockwise(cloneDeep(updatedBoard), rotationsAfter);
 }
 
-export function combineBoardUp(board) {
-  const newBoard = cloneDeep(board);
-  return combineSquares(newBoard);
+/* up */
+export function onMoveUp(board) {
+  return onMove(board, 0, 0);
 }
 
 /* DOWN */
-export function trimBoardDown(board) {
-  const newBoard = rotateArrayClockwise(cloneDeep(board), 2);
-  const trimmedBoard = removeSpaces(newBoard);
-  return rotateArrayClockwise(cloneDeep(trimmedBoard), 2);
-}
-
-export function combineBoardDown(board) {
-  const newBoard = rotateArrayClockwise(cloneDeep(board), 2);
-  const trimmedBoard = combineSquares(newBoard);
-  return rotateArrayClockwise(cloneDeep(trimmedBoard), 2);
+export function onMoveDown(board) {
+  return onMove(board, 2, 2);
 }
 
 /* LEFT */
-export function trimBoardLeft(board) {
-  const newBoard = rotateArrayClockwise(cloneDeep(board), 1);
-  const trimmedBoard = removeSpaces(newBoard);
-  return rotateArrayClockwise(cloneDeep(trimmedBoard), 3);
-}
-
-export function combineBoardLeft(board) {
-  const newBoard = rotateArrayClockwise(cloneDeep(board), 1);
-  const trimmedBoard = combineSquares(newBoard);
-  return rotateArrayClockwise(cloneDeep(trimmedBoard), 3);
+export function onMoveLeft(board) {
+  return onMove(board, 1, 3);
 }
 
 /* RIGHT */
-export function trimBoardRight(board) {
-  const newBoard = rotateArrayClockwise(cloneDeep(board), 3);
-  const trimmedBoard = removeSpaces(newBoard);
-  return rotateArrayClockwise(cloneDeep(trimmedBoard), 1);
-}
-
-export function combineBoardRight(board) {
-  const newBoard = rotateArrayClockwise(cloneDeep(board), 3);
-  const trimmedBoard = combineSquares(newBoard);
-  return rotateArrayClockwise(cloneDeep(trimmedBoard), 1);
+export function onMoveRight(board) {
+  return onMove(board, 3, 1);
 }
