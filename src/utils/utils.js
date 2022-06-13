@@ -113,7 +113,7 @@ function removeSpacesRecursively(board, rowIndex, squareIndex) {
     removeSpacesRecursively(board, rowIndex + 1, squareIndex);
 }
 
-export function removeSpaces(board) {
+function removeSpaces(board) {
   const newBoard = cloneDeep(board);
 
   const columns = Array.from({ length: newBoard.length }, (v, i) => 0);
@@ -144,7 +144,7 @@ function combineSquaresRecursively(board, rowIndex, squareIndex) {
   }
 }
 
-export function combineSquares(board) {
+function combineSquares(board) {
   const newBoard = cloneDeep(board);
 
   const columns = Array.from({ length: newBoard.length }, (v, i) => 0);
@@ -155,28 +155,24 @@ export function combineSquares(board) {
   return newBoard;
 }
 
-export function onMove(board, rotationsBefore, rotationsAfter) {
+function onMove(board, rotationsBefore, rotationsAfter) {
   const newBoard = rotateArrayClockwise(cloneDeep(board), rotationsBefore);
   const updatedBoard = removeSpaces(combineSquares(removeSpaces(newBoard)));
   return rotateArrayClockwise(cloneDeep(updatedBoard), rotationsAfter);
 }
 
-/* up */
 export function onMoveUp(board) {
   return onMove(board, 0, 0);
 }
 
-/* DOWN */
 export function onMoveDown(board) {
   return onMove(board, 2, 2);
 }
 
-/* LEFT */
 export function onMoveLeft(board) {
   return onMove(board, 1, 3);
 }
 
-/* RIGHT */
 export function onMoveRight(board) {
   return onMove(board, 3, 1);
 }
